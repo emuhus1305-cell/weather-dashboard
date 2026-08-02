@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        background: #5a6b7d;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .fade-in {
+        animation: fadeIn 0.4s ease-out;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .spinner {
+        width: 36px;
+        height: 36px;
+        border: 3px solid rgba(255, 255, 255, 0.15);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+      .forecast-scroll::-webkit-scrollbar {
+        height: 4px;
+      }
+      .forecast-scroll::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 4px;
+      }
+      .forecast-scroll::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body class="flex items-center justify-center min-h-screen p-4 font-sans">
+    <div
+      class="w-full max-w-[380px] bg-[#3d4f5f] rounded-[28px] p-6 shadow-2xl"
+    >
+      <div class="relative mb-5">
+        <input
+          id="search-input"
+          placeholder="Search City"
+          class="w-full bg-[#4a5d6e] border border-white/[0.08] rounded-full px-5 py-3.5 pr-12 text-white placeholder-white/50 outline-none text-[15px]"
+        />
+        <button
+          id="search-btn"
+          class="absolute right-1.5 top-1/2 -translate-y-1/2 bg-[#5a6d7e] rounded-full w-[38px] h-[38px] flex items-center justify-center cursor-pointer"
+        >
+          <img
+            src="./img/search.png"
+            alt="search"
+            class="w-[18px] h-[18px] object-contain pointer-events-none"
+          />
+        </button>
+      </div>
+      <div id="weather-container"></div>
+    </div>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
