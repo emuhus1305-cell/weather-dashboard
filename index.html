@@ -4,73 +4,217 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Weather Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
       body {
-        background: #5a6b7d;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #1a1a1a;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+        color: #ffffff;
       }
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
+
+      .weather-card {
+        background: #2d2d2d;
+        border-radius: 24px;
+        padding: 2rem;
+        width: 100%;
+        max-width: 480px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
       }
-      .fade-in {
-        animation: fadeIn 0.4s ease-out;
+
+      .search-wrapper {
+        position: relative;
+        margin-bottom: 1.5rem;
       }
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
+
+      #search-form {
+        display: flex;
+        align-items: center;
+        background: #3d3d3d;
+        border-radius: 16px;
+        padding: 0.75rem 1rem;
+        gap: 0.5rem;
       }
-      .spinner {
-        width: 36px;
-        height: 36px;
-        border: 3px solid rgba(255, 255, 255, 0.15);
-        border-top-color: white;
-        border-radius: 50%;
-        animation: spin 0.8s linear infinite;
+
+      #search-input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        outline: none;
+        color: #ffffff;
+        font-size: 1rem;
+        font-family: inherit;
       }
-      .forecast-scroll::-webkit-scrollbar {
-        height: 4px;
+
+      #search-input::placeholder {
+        color: #888888;
       }
-      .forecast-scroll::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.08);
-        border-radius: 4px;
+
+      .search-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
-      .forecast-scroll::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 4px;
+
+      .search-btn img {
+        width: 20px;
+        height: 20px;
+        opacity: 0.7;
+      }
+
+      .location-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .location {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.1rem;
+        font-weight: 500;
+      }
+
+      .location img {
+        width: 18px;
+        height: 18px;
+        opacity: 0.8;
+      }
+
+      .date {
+        color: #b0b0b0;
+        font-size: 0.95rem;
+      }
+
+      .current-weather {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+      }
+
+      .weather-icon-big {
+        width: 120px;
+        height: 120px;
+        object-fit: contain;
+      }
+
+      .temp-info {
+        text-align: right;
+      }
+
+      .temp-value {
+        font-size: 4rem;
+        font-weight: 300;
+        line-height: 1;
+        margin-bottom: 0.25rem;
+      }
+
+      .temp-condition {
+        font-size: 1.1rem;
+        color: #b0b0b0;
+      }
+
+      .forecast-title {
+        font-size: 1rem;
+        font-weight: 500;
+        margin-bottom: 1rem;
+        color: #e0e0e0;
+      }
+
+      .forecast-row {
+        display: flex;
+        gap: 0.75rem;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+      }
+
+      .forecast-row::-webkit-scrollbar {
+        display: none;
+      }
+
+      .forecast-card {
+        background: #3a3a3a;
+        border-radius: 16px;
+        padding: 1rem 0.75rem;
+        min-width: 72px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        flex: 1;
+      }
+
+      .forecast-day {
+        font-size: 0.85rem;
+        color: #cccccc;
+        font-weight: 500;
+      }
+
+      .forecast-icon {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+      }
+
+      .forecast-temp {
+        font-size: 0.95rem;
+        font-weight: 600;
+      }
+      .error {
+        color: #ff6b6b;
+        text-align: center;
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        min-height: 1.5rem;
       }
     </style>
   </head>
-  <body class="flex items-center justify-center min-h-screen p-4 font-sans">
-    <div
-      class="w-full max-w-[380px] bg-[#3d4f5f] rounded-[28px] p-6 shadow-2xl"
-    >
-      <div class="relative mb-5">
-        <input
-          id="search-input"
-          placeholder="Search City"
-          class="w-full bg-[#4a5d6e] border border-white/[0.08] rounded-full px-5 py-3.5 pr-12 text-white placeholder-white/50 outline-none text-[15px]"
-        />
-        <button
-          id="search-btn"
-          class="absolute right-1.5 top-1/2 -translate-y-1/2 bg-[#5a6d7e] rounded-full w-[38px] h-[38px] flex items-center justify-center cursor-pointer"
-        >
-          <img
-            src="./img/search.png"
-            alt="search"
-            class="w-[18px] h-[18px] object-contain pointer-events-none"
+  <body>
+    <div class="weather-card">
+      <div class="search-wrapper">
+        <form id="search-form">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Search city..."
+            autocomplete="off"
           />
-        </button>
+          <button type="submit" class="search-btn">
+            <img src="img/search.png" alt="search" />
+          </button>
+        </form>
+        <p class="error" id="error"></p>
       </div>
-      <div id="weather-container"></div>
+
+      <div id="current">
+        <div class="location-row">
+          <div class="location">
+            <img src="img/location.png" alt="location" />
+            <span>Search for a city</span>
+          </div>
+          <div class="date" id="current-date">--</div>
+        </div>
+      </div>
+      <div id="forecast"></div>
     </div>
-    <script type="module" src="./app.js"></script>
+
+    <script type="module" src="./src/app.js"></script>
   </body>
 </html>
